@@ -1,0 +1,26 @@
+ul{
+    list-style: none;
+}
+html,body{
+    background-color: #e5e5e5;
+}
+.main{
+    padding: 15px;
+}
+
+.el-breadcrumb .el-breadcrumb__item{
+    height: 32px;
+    line-height: 32px;;
+}
+
+.el-breadcrumb .topBtn{
+    float: right;
+    height: 32px;line-height: 32px;
+    padding: 0px 10px;
+    color: #409EFF;
+}
+
+.el-breadcrumb .topBtn:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
