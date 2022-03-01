@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 import Login from '../appComps/login.vue'
 import Home from '../appComps/home.vue'
 // 导入全局样式表
 import '../assets/css/global.css'
+
+import Welcome from "../appComps/welcome"
+import Users from '../appComps/User/users'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,7 +19,14 @@ const routes = [
     },{
         path: '/home',
         name: 'home',
-        component: Home
+        component: Home,
+        //重定向
+        redirect: '/welcome',
+        //子路由，在home嵌套显示welcome组件
+        children:[
+            {path:'/welcome', component: Welcome},
+            {path: '/users', component: Users}
+        ]
     }
 ]
 
