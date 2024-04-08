@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>flv.js demo</title>
+    <style>
+        .mainContainer {
+    display: block;
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.urlInput {
+    display: block;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.centeredVideo {
+    display: block;
+    width: 100%;
+    height: 576px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+}
+
+.controls {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+    </style>
+</head>
+
+<body>
+    <div class="mainContainer">
+        <video id="videoElement" class="centeredVideo" controls autoplay="autoplay" width="1024" height="576">
+            Your browser is too old which doesn't support HTML5 video.
+        </video>
+    </div>
+    <br>
+    <div class="controls">
+        <!--<button onclick="flv_load()">加载</button>-->
+        <button onclick="flv_start()">开始</button>
+        <button onclick="flv_pause()">暂停</button>
+        <button onclick="flv_destroy()">停止</button>
+        <input style="width:100px" type="text" name="seekpoint" />
+        <button onclick="flv_seekto()">跳转</button>
+    </div>
+    <script src="../../assets/js/flv.js"></script>
+    <script>
+        var url = 'http://127.0.0.1:88/flv?port=4936&app='+'myapp'+'&stream='+'test';
+        var player = document.getElementById('videoElement');
+        if (flvjs.isSupported()) {
+            var flvPlayer = flvjs.createPlayer({
+                type: 'flv',
+                enableWorker: true,     //浏览器端开启flv.js的worker,多进程运行flv.js
+                isLive: true,           //直播模式
+                hasAudio: true,        //关闭音频             
+                hasVideo: true,
+                stashInitialSize: 128,  
+                enableStashBuffer: false, //播放flv时，设置是否启用播放缓存，只在直播起作用。
+                url: url
+            });
+            flvPlayer.attachMediaElement(videoElement);
+            flvPlayer.load(); //加载
+            //flvPlayer.play();
+            // setInterval(()=>{
+            //     sync(player)
+            // },5000);
+        }
+        function sync(player){
+            if (!player.buffered.length) {
+                return;
+            }
+            var end = player.buffered.end(0);
+            var diff = end - player.currentTime;
+            if (diff >= 4) {
+                console.log("进行时延校正");
+                player.currentTime = end;
+            }
+        
+        }
+     
+        function flv_start() {
+            player.play();
+            
+        }
+
+        function flv_pause() {
+            player.pause();
+        }
+
+        function flv_destroy() {
+            player.pause();
+            player.unload();
+            player.detachMediaElement();
+            player.destroy();
+            player = null;
+        }
+
+        function flv_seekto() {
+            player.currentTime = parseFloat(document.getElementsByName('seekpoint')[0].value);
+        }
+       
+    </script>
+</body>
+
+</html>

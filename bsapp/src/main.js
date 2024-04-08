@@ -3,11 +3,21 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './plugins/element.js'
+import './assets/comm/kmdev.js'
+import * as echarts from 'echarts'
+import video from "video.js"
+import 'video.js/dist/video-js.css'
+
 
 import axios from 'axios'
 Vue.prototype.$http = axios
+// 解决axios的post无法给后台传值的情况，qs包含在axios内，不必额外下载
+import qs from 'qs'
+Vue.prototype.$qs = qs
+
+Vue.prototype.$video = video
 //配置请求的根路径
-axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+axios.defaults.baseURL = 'http://127.0.0.1:3007/'
 axios.interceptors.request.use(config => {
     console.log(config)
     config.headers.Authorization = window.sessionStorage.getItem("token")
@@ -15,6 +25,8 @@ axios.interceptors.request.use(config => {
     return config
 })
 Vue.config.productionTip = false
+
+Vue.prototype.$echarts = echarts
 
 new Vue({
     router,
